@@ -1,19 +1,18 @@
-package programers.hash;
+package programers.level1;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class NotComplete {
     public static void main(String[] args) {
-        Solution s = new Solution();
+        NotSolution s = new NotSolution();
         String[] participant = {"mislav", "stanko", "ana", "test"};
         String[] completion = {"stanko", "ana", "mislav"};
         System.out.println("so: "+ s.solution(participant, completion));
     }
 }
 
-class Solution {
+class NotSolution {
     public String solution(String[] participant, String[] completion) {
         String answer = "";
         HashMap<String, Integer> hm = new HashMap<>();

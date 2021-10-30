@@ -6,8 +6,8 @@ public class Test2 {
         int n = 5;
         int[][] num = new int[n][n];
 
-        for (int i = 0; i < num.length; i++) {
-
-        }
+//        for (int i = 0; i < num.length; i++) {
+//
+//        }
     }
 }

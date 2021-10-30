@@ -7,12 +7,12 @@ public class Lotto {
     public static void main(String[] args) {
         int[] lottos = {0, 0, 0, 0, 0, 0};
         int[] win_nums = {38, 19, 20, 40, 15, 25};
-        Solution s = new Solution();
+        LSolution s = new LSolution();
         s.solution(lottos, win_nums);
     }
 }
 
-class Solution {
+class LSolution {
     public int[] solution(int[] lottos, int[] win_nums) {
         int[] answer = new int[2];
         Arrays.sort(lottos);
