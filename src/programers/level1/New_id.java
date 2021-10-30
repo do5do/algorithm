@@ -1,6 +1,6 @@
 package programers.level1;
 
-public class new_id {
+public class New_id {
     public static void main(String[] args) {
         String new_id = "{}[]";
 

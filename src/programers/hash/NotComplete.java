@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Level1 {
+public class NotComplete {
     public static void main(String[] args) {
         Solution s = new Solution();
         String[] participant = {"mislav", "stanko", "ana", "test"};

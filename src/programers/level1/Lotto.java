@@ -1,20 +1,18 @@
 package programers.level1;
 
-import programers.level1.Solution2;
-
 import java.util.Arrays;
 import java.util.List;
 
-public class lotto {
+public class Lotto {
     public static void main(String[] args) {
         int[] lottos = {0, 0, 0, 0, 0, 0};
         int[] win_nums = {38, 19, 20, 40, 15, 25};
-        Solution2 s = new Solution2();
+        Solution s = new Solution();
         s.solution(lottos, win_nums);
     }
 }
 
-class Solution2 {
+class Solution {
     public int[] solution(int[] lottos, int[] win_nums) {
         int[] answer = new int[2];
         Arrays.sort(lottos);
@@ -22,7 +20,7 @@ class Solution2 {
         int minMatch = 0;
         int maxMatch = 0;
         Integer[] score = {6, 5, 4, 3, 2}; // Integer라고 해야 indexOf() 사용 가능
-        // Integer[] score = {6, 6, 5, 4, 3, 2, 1}; //
+        // Integer[] score = {6, 6, 5, 4, 3, 2, 1};
 
         for (int i = 0; i < lottos.length; i++) {
             if (lottos[i] == 0) {
@@ -43,7 +41,8 @@ class Solution2 {
 
         if (maxMatch < 2) {
             answer[0] = 6;
-        } else if (minMatch < 2) {
+        }
+        if (minMatch < 2) {
             answer[1] = 6;
         }
 
