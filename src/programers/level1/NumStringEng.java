@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class numStringEng {
+public class NumStringEng {
     public static void main(String[] args) {
         int answer = 0;
         String s = "one4seveneight";
