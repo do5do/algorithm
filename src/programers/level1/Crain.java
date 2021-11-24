@@ -35,7 +35,7 @@ public class Crain {
                 }
             }
         }
-
+        System.out.println(result);
         return answer;
     }
 
