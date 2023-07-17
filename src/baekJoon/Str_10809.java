@@ -16,7 +16,8 @@ public class Str_10809 {
         for (int i = 0; i < result.length; i++) {
             char chNum = (char) num; // 아스키코드로 변환 97 -> a
             for (int j = 0; j < word.length(); j++) {
-                if (Character.toString(chNum).equals(Character.toString(word.charAt(j)))) {
+//                if (Character.toString(chNum).equals(Character.toString(word.charAt(j)))) {
+                if (chNum == word.charAt(j)) {
                     result[i] = j;
                     break;
                 }

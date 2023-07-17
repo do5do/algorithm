@@ -41,7 +41,7 @@ public class FailRate {
 //                    return -1;
 //                } else if (o1.getValue() == o2.getValue()) {
 //                    return 0;
-//                } else {
+//                } else { // o1.getValue() < o2.getValue()
 //                    return 1;
 //                }
 //            }

@@ -80,7 +80,7 @@ public class KeyPad2 {
         int numX = keyPad()[number][0];
         int numY = keyPad()[number][1];
 
-        return Math.abs(numX - handX) + Math.abs(numY - handY); // abs() : 절대값 출력 (음수면 - 떼기)
+        return Math.abs(numX - handX) + Math.abs(numY - handY); // abs() : 절대값 출력 (음수면 -떼기)
     }
 
     public static void main(String[] args) {
