@@ -6,98 +6,117 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Australian_voting_4419 {
-    static List<String> candidates = new ArrayList<>(); // 후보자
-    static List<List<Integer>> votes = new ArrayList<>(); // 투표 내역
-    static List<String> electedCandidates = new ArrayList<>(); // 선출된 후보자 (return value)
+    static String[] candidates; // 후보자
+    static List<Queue<Integer>> votes = new ArrayList<>(); // 투표 내역
     static int numCandidates;
-    static int numVotes; // 유권자 수 (투표 용지 수)
-    static int[] votedCandidates; // 후보자별 득표수
+    static int numVotes; // 유권자 수
+    static int[] votedCandidates; // 후보자 별 득표 수
     static boolean[] eliminatedCandidates; // 탈락 여부
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine()); // 후보자 수
 
-        for (int i = 0; i < n; i++) { // 후보자 세팅
-            candidates.add(br.readLine());
-        }
-
-        // 투표 내역 세팅
-        StringTokenizer st;
-        String input;
-        while ((input = br.readLine()) != null) {
-            if (input.isEmpty()) {
-                break;
-            }
-
-            st = new StringTokenizer(input);
-            List<Integer> arr = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                arr.add(Integer.parseInt(st.nextToken()) - 1); // 후보자 index 맞춰주기 위해 -1을 해준다.
-            }
-            votes.add(arr);
-        }
-
-        // 개표
-        vote(candidates, votes);
-        for (String candidate : electedCandidates) {
-            System.out.println(candidate); // 출력
-        }
-    }
-
-    public static void vote(List<String> candidates, List<List<Integer>> votes) {
-        numCandidates = candidates.size();
-        numVotes = votes.size();
+        // 초기화
+        candidates = new String[n];
+        numCandidates = candidates.length;
         votedCandidates = new int[numCandidates];
         eliminatedCandidates = new boolean[numCandidates];
 
-        // 첫 개표
-        for (List<Integer> vote : votes) {
-            votedCandidates[vote.get(0)]++; // 득표수 올리기
+        // 후보자 세팅
+        for (int i = 0; i < n; i++) {
+            candidates[i] = br.readLine();
         }
 
-        while (!getVote()) { // 과반수를 넘은 후보가 있거나 모두 동률이면 중단
-            // 최소 득표수 갱신
-            int minVote = Integer.MAX_VALUE;
+        // 투표 내역 세팅
+        String input;
+        while ((input = br.readLine()) != null && !input.isEmpty()) {
+            StringTokenizer st = new StringTokenizer(input);
+            Queue<Integer> vote = new LinkedList<>();
+            for (int i = 0; i < n; i++) {
+                vote.offer(Integer.parseInt(st.nextToken()) - 1); // 후보자 index 맞춰주기 위해 -1을 해준다.
+            }
+            votes.add(vote);
+        }
+        numVotes = votes.size();
+
+        // 유권자가 없을 때
+        if (numVotes == 0) {
             for (int i = 0; i < numCandidates; i++) {
-                if (!eliminatedCandidates[i] && votedCandidates[i] < minVote) {
-                    minVote = votedCandidates[i];
+                System.out.println(candidates[i]);
+            }
+        }
+
+        // 후보자 선출
+        getElectedCandidates();
+    }
+
+    public static void getElectedCandidates() {
+        // 첫 개표
+        getVote();
+
+        // 과반수를 넘은 후보가 있으면 중단
+        while (!checkMajority()) {
+            // 최소, 최대 득표수 갱신
+            int min = Integer.MAX_VALUE, max = 0;
+            for (int i = 0; i < numCandidates; i++) {
+                if (!eliminatedCandidates[i]) {
+                    min = Math.min(min, votedCandidates[i]);
+                    max = Math.min(max, votedCandidates[i]);
                 }
+            }
+
+            // 동률이면 중단
+            if (min == max) {
+                for (int i = 0; i < numCandidates; i++) {
+                    if (!eliminatedCandidates[i]) {
+                        System.out.println(candidates[i]);
+                    }
+                }
+                break;
             }
 
             // 과반수를 넘은 후보가 없을 때 최소 득표를 한 후보 탈락
             for (int i = 0; i < numCandidates; i++) {
-                if (!eliminatedCandidates[i] && votedCandidates[i] == minVote) {
+                if (!eliminatedCandidates[i] && votedCandidates[i] == min) {
                     eliminatedCandidates[i] = true;
+                }
+            }
+
+            // 탈락한 후보 투표 내역에서 제거
+            for (Queue<Integer> vote : votes) {
+                if (!vote.isEmpty() && eliminatedCandidates[vote.peek()]) {
+                    vote.poll();
                 }
             }
 
             // 재집계
             votedCandidates = new int[numCandidates]; // 득표수 초기화
-            for (List<Integer> vote : votes) {
-                votedCandidates[vote.get(0)]++; // 득표수 올리기
+            getVote();
+        }
+    }
+
+    private static void getVote() { // 개표
+        for (Queue<Integer> vote : votes) {
+            if (!vote.isEmpty()) {
+                votedCandidates[vote.peek()]++; // 득표수 카운트
             }
         }
     }
 
-    public static boolean getVote() {
-        boolean flag = true;
-
+    public static boolean checkMajority() { // 과반수 확인
         for (int i = 0; i < numCandidates; i++) {
             if (!eliminatedCandidates[i]) {
-                int num = votedCandidates[0];
-
                 if (votedCandidates[i] > numVotes / 2) { // 과반수를 넘은 후보가 있는지 확인
-                    electedCandidates.add(candidates.get(i));
-                    flag = true;
-                }
-
-                if (votedCandidates[i] != num) { // 남은 후보가 모두 동률인지 확인
-                    flag = false;
+                    System.out.println(candidates[i]);
+                    return true;
                 }
             }
         }
-
-        return flag;
+        return false;
     }
 }
+
+/**
+ * 7초에서 시간초과 발생.. 이유를 모르겠다. ㅠㅠ
+ */
