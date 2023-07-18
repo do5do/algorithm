@@ -117,6 +117,3 @@ public class Australian_voting_4419 {
     }
 }
 
-/**
- * 7초에서 시간초과 발생.. 이유를 모르겠다. ㅠㅠ
- */
