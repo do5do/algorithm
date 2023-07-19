@@ -11,7 +11,7 @@ public class Australian_voting_4419 {
     static int numCandidates; // 후보자 수
     static int numVotes; // 유권자 수
     static int[] votedCandidates; // 후보자 별 득표 수
-    static boolean[] eliminatedCandidates; // 탈락 여부
+    static boolean[] eliminatedCandidates; // 후보자 탈락 여부
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,7 +19,6 @@ public class Australian_voting_4419 {
 
         // 초기화
         candidates = new String[n];
-        numCandidates = candidates.length;
         votedCandidates = new int[numCandidates];
         eliminatedCandidates = new boolean[numCandidates];
 
@@ -42,12 +41,13 @@ public class Australian_voting_4419 {
 
         // 유권자가 없을 때
         if (numVotes == 0) {
-            for (int i = 0; i < numCandidates; i++) {
+            for (int i = 0; i < n; i++) {
                 System.out.println(candidates[i]);
             }
         }
 
         // 후보자 선출
+        numCandidates = candidates.length;
         getElectedCandidates();
     }
 
