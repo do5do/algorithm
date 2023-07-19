@@ -8,7 +8,7 @@ import java.util.*;
 public class Australian_voting_4419 {
     static String[] candidates; // 후보자
     static List<Queue<Integer>> votes = new ArrayList<>(); // 투표 내역
-    static int numCandidates;
+    static int numCandidates; // 후보자 수
     static int numVotes; // 유권자 수
     static int[] votedCandidates; // 후보자 별 득표 수
     static boolean[] eliminatedCandidates; // 탈락 여부
@@ -57,17 +57,25 @@ public class Australian_voting_4419 {
 
         // 과반수를 넘은 후보가 있으면 중단
         while (!checkMajority()) {
-            // 최소, 최대 득표수 갱신
-            int min = Integer.MAX_VALUE, max = 0;
+            // 최소 득표수 갱신
+            int min = Integer.MAX_VALUE;
             for (int i = 0; i < numCandidates; i++) {
                 if (!eliminatedCandidates[i]) {
                     min = Math.min(min, votedCandidates[i]);
-                    max = Math.min(max, votedCandidates[i]);
+                }
+            }
+
+            // 동률 확인
+            boolean tie = true;
+            for (int i = 0; i < numCandidates; i++) {
+                if (!eliminatedCandidates[i] && votedCandidates[i] != min) { // 모든 득표수가 최소값과 같으면 모두 동률
+                    tie = false;
+                    break;
                 }
             }
 
             // 동률이면 중단
-            if (min == max) {
+            if (tie) {
                 for (int i = 0; i < numCandidates; i++) {
                     if (!eliminatedCandidates[i]) {
                         System.out.println(candidates[i]);
@@ -116,4 +124,3 @@ public class Australian_voting_4419 {
         return false;
     }
 }
-
