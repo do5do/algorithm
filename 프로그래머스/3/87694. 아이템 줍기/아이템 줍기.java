@@ -4,7 +4,7 @@ class Solution {
     int[][] matrix = new int[102][102];
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
-    int answer = 9999;
+    int answer = 0;
     
     public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
         for (int[] r : rectangle) {
@@ -27,7 +27,7 @@ class Solution {
             int[] cur = queue.poll();
             
             if (cur[0] == goalX && cur[1] == goalY) {
-                answer = Math.min(cur[2], answer);
+                answer = cur[2];
                 return;
             }
             
