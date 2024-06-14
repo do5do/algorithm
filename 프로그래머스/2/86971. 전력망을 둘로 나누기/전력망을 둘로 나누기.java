@@ -23,11 +23,7 @@ class Solution {
         
         for (int i = 0; i < wires.length; i++) {
             int[] delete = wires[i];
-            
-            if (!visited[i]) {
-                dfs(delete[0], delete);
-                // System.out.println(cnt);
-            }
+            dfs(delete[0], delete);
             
             answer = Math.min(answer, Math.abs(cnt - (n - cnt)));
             cnt = 0;
