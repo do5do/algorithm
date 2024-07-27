@@ -10,32 +10,24 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         int[] arr = new int[n];
+        int max = 1_000_001;
+        boolean[] count = new boolean[max];
+
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
+            count[arr[i]] = true;
         }
 
         int target = Integer.parseInt(br.readLine());
 
-        Arrays.sort(arr);
-
-        int left = 0;
-        int right = n - 1;
         int cnt = 0;
-
-        while (left < right) {
-            int sum = arr[left] + arr[right];
-
-            if (sum < target) {
-                left++;
-            } else if (sum > target) {
-                right--;
-            } else {
+        for (int i = 0; i < n; i++) {
+            int b = target - arr[i];
+            if (b > 0 && b < max && count[b]) {
                 cnt++;
-                left++;
-                right--;
             }
         }
 
-        System.out.println(cnt);
+        System.out.println(cnt / 2);
     }
 }
