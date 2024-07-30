@@ -1,33 +1,30 @@
 class Solution {
     public String[] solution(String[] quiz) {
         String[] answer = new String[quiz.length];
-        
         for (int i = 0; i < quiz.length; i++) {
-            String[] split = quiz[i].split(" ");
+            String[] arr = quiz[i].split(" ");
+            int a = Integer.parseInt(arr[0]);
+            String operator = arr[1];
+            int b = Integer.parseInt(arr[2]);
+            int result = Integer.parseInt(arr[4]);
             
-            int a = getNum(split[0]);
-            String operator = split[1];
-            int b = getNum(split[2]);
-            int result = getNum(split[4]);
-            
+            boolean flag = false;
             if (operator.equals("+")) {
                 if (a + b == result) {
-                    answer[i] = "O";
-                    continue;
+                    flag = true;
                 }
             } else {
                 if (a - b == result) {
-                    answer[i] = "O";
-                    continue;
+                    flag = true;
                 }
             }
             
-            answer[i] = "X";
+            if (flag) {
+                answer[i] = "O";
+            } else {
+                answer[i] = "X";
+            }
         }
         return answer;
-    }
-    
-    public int getNum(String num) {
-        return Integer.parseInt(num);
     }
 }
