@@ -4,20 +4,17 @@ import java.util.stream.*;
 class Solution {
     public int[] solution(int[] arr, int[] delete_list) {
         int[] answer = {};
-        Set<Integer> set1 = Arrays.stream(arr)
-            .boxed()
-            .collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<Integer> arrSet = new LinkedHashSet<>(Arrays.stream(arr)
+                                            .boxed().collect(Collectors.toList()));
+        Set<Integer> delSet = new LinkedHashSet<>(Arrays.stream(delete_list)
+                                            .boxed().collect(Collectors.toList()));
         
-        Set<Integer> set2 = Arrays.stream(delete_list)
-            .boxed()
-            .collect(Collectors.toCollection(LinkedHashSet::new));
+        arrSet.removeAll(delSet);
         
-        set1.removeAll(set2);
-
-        answer = new int[set1.size()];
+        answer = new int[arrSet.size()];
         int idx = 0;
-        for (Integer s : set1) {
-            answer[idx++] = s;
+        for (int a : arrSet) {
+            answer[idx++] = a;
         }
         return answer;
     }
