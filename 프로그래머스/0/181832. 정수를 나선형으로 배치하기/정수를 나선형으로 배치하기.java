@@ -1,44 +1,45 @@
 class Solution {
     public int[][] solution(int n) {
         int[][] answer = new int[n][n];
+        int row = 0;
+        int col = 0;
         int num = 1;
-        int i = 0;
-        int j = 0;
         int direction = 0;
-
+        
         while (num <= n * n) {
-            answer[i][j] = num++;
-
-            if (direction == 0) { // 오른쪽
-                if (j == n - 1 || answer[i][j + 1] != 0) {
-                    i++;
+            answer[row][col] = num++;
+            
+            if (direction == 0) {
+                if (col == n - 1 || answer[row][col + 1] != 0) {
+                    row++;
                     direction = 1;
                 } else {
-                    j++;
+                    col++;
                 }
-            } else if (direction == 1) { // 아래
-                if (i == n - 1 || answer[i + 1][j] != 0) {
-                    j--;
+            } else if (direction == 1) {
+                if (row == n - 1 || answer[row + 1][col] != 0) {
+                    col--;
                     direction = 2;
                 } else {
-                    i++;
+                    row++;
                 }
-            } else if (direction == 2) { // 왼쪽
-                if (j == 0 || answer[i][j - 1] != 0) {
-                    i--;
+            } else if (direction == 2) {
+                if (col == 0 || answer[row][col - 1] != 0) {
+                    row--;
                     direction = 3;
                 } else {
-                    j--;
+                    col--;
                 }
-            } else { // 위
-                if (i == 0 || answer[i - 1][j] != 0) {
-                    j++;
+            } else {
+                if (row == 0 || answer[row - 1][col] != 0) {
+                    col++;
                     direction = 0;
                 } else {
-                    i--;
+                    row--;
                 }
             }
         }
+        
         return answer;
     }
 }
