@@ -28,25 +28,21 @@ class Solution {
     public void dfs(int depth, int[] picks) {
         if (depth == result.length) {
             int idx = 0;
-            int totalTired = 0;
+            int tired = 0;
             
             out: for (int i = 0; i < result.length; i++) { // 미네랄 캐기
-                int tired = 0;
-                
                 for (int j = 0; j < 5; j++) {
                     if (idx >= intMineral.length) {
-                        totalTired += tired;
                         break out;
                     }
                     
                     int mineral = intMineral[idx++];
                     tired += matrix[result[i]][mineral];
                 }
-                
-                totalTired += tired;
             }
             
-            answer = Math.min(answer, totalTired);
+            answer = Math.min(answer, tired);
+            return;
         }
         
         for (int i = 0; i < 3; i++) {
