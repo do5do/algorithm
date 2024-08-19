@@ -1,37 +1,30 @@
 import java.util.*;
 
 class Solution {
-    int[] goal;
-    int[] start;
-    int n;
-    int m;
-    char[][] matrix;
+    int[] start = new int[2];
+    int[] goal = new int[2];
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
     
     public int solution(String[] board) {
-        int answer = 0;
-        n = board.length;
-        m = board[0].length();
-        matrix = new char[n][m];
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                matrix[i][j] = board[i].charAt(j);
-                
-                if (matrix[i][j] == 'R') {
-                    start = new int[] {i, j};
-                } else if (matrix[i][j] == 'G') {
-                    goal = new int[] {i, j};
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length(); j++) {
+                if (board[i].charAt(j) == 'R') {
+                    start[0] = i;
+                    start[1] = j;
+                } else if (board[i].charAt(j) == 'G') {
+                    goal[0] = i;
+                    goal[1] = j;
                 }
             }
         }
         
-        answer = bfs();
-        return answer;
+        return bfs(board);
     }
     
-    public int bfs() {
+    public int bfs(String[] board) {
+        int n = board.length;
+        int m = board[0].length();
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[] {start[0], start[1], 0});
         boolean[][] visited = new boolean[n][m];
@@ -41,7 +34,7 @@ class Solution {
             int[] cur = queue.poll();
             
             if (cur[0] == goal[0] && cur[1] == goal[1]) {
-                return cur[2];
+                 return cur[2];
             }
             
             for (int i = 0; i < 4; i++) {
@@ -53,10 +46,10 @@ class Solution {
                     ny += dy[i];
                     
                     if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
-                        if (matrix[nx][ny] == 'D') {
+                        if (board[nx].charAt(ny) == 'D') {
                             break;
                         }
-                    } else { 
+                    } else {
                         break;
                     }
                 }
@@ -64,11 +57,13 @@ class Solution {
                 nx -= dx[i];
                 ny -= dy[i];
                 
-                if (!visited[nx][ny]) {
-                    visited[nx][ny] = true;
-                    queue.offer(new int[] {nx, ny, cur[2] + 1});
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
+                    if (!visited[nx][ny]) {
+                        visited[nx][ny] = true;
+                        queue.offer(new int[] {nx, ny, cur[2] + 1});
+                    }
                 }
-            }   
+            }
         }
         
         return -1;
