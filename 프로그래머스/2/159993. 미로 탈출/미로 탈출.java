@@ -27,12 +27,12 @@ class Solution {
             }
         }
         
-        int leverCnt = leverBfs(maps);
+        int leverCnt = bfs(maps, start, lever);
         if (leverCnt == -1) {
             return -1;
         }
         
-        int exitCnt = exitBfs(maps);
+        int exitCnt = bfs(maps, lever, exit);
         if (exitCnt == -1) {
             return -1;
         }
@@ -40,7 +40,7 @@ class Solution {
         return leverCnt + exitCnt;
     }
     
-    public int leverBfs(String[] maps) {
+    public int bfs(String[] maps, int[] start, int[] end) {
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[] {start[0], start[1], 0});
         boolean[][] visited = new boolean[n][m];
@@ -49,36 +49,7 @@ class Solution {
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
             
-            if (cur[0] == lever[0] && cur[1] == lever[1]) {
-                return cur[2];
-            }
-            
-            for (int i = 0; i < 4; i++) {
-                int nx = dx[i] + cur[0];
-                int ny = dy[i] + cur[1];
-                
-                if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
-                    if (!visited[nx][ny] && maps[nx].charAt(ny) != 'X') {
-                        visited[nx][ny] = true;
-                        queue.offer(new int[] {nx, ny, cur[2] + 1});
-                    }
-                }
-            }
-        }
-        
-        return -1;
-    }
-    
-    public int exitBfs(String[] maps) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[] {lever[0], lever[1], 0});
-        boolean[][] visited = new boolean[n][m];
-        visited[lever[0]][lever[1]] = true;
-        
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
-            
-            if (cur[0] == exit[0] && cur[1] == exit[1]) {
+            if (cur[0] == end[0] && cur[1] == end[1]) {
                 return cur[2];
             }
             
