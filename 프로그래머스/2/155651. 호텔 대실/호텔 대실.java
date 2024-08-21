@@ -2,7 +2,6 @@ import java.util.*;
 
 class Solution {
     public int solution(String[][] book_time) {
-        int answer = 1;
         List<Reservation> reservations = new ArrayList<>();
         
         for (String[] book : book_time) {
@@ -31,7 +30,6 @@ class Solution {
             }
             
             if (newRoom) {
-                answer++;
                 rooms.add(cur.end + 10);
             }
         }
