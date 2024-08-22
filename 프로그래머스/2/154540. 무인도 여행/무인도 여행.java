@@ -1,42 +1,24 @@
 import java.util.*;
 
 class Solution {
-    int[][] matrix;
+    int n, m;
     boolean[][] visited;
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
-    int n;
-    int m;
-    int cnt = 0;
     
     public int[] solution(String[] maps) {
         int[] answer = {};
         n = maps.length;
         m = maps[0].length();
-        matrix = new int[n][m];
+        
         visited = new boolean[n][m];
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                int item = maps[i].charAt(j);
-                if (item == 'X') {
-                    matrix[i][j] = -1;
-                    continue;
-                }
-                matrix[i][j] = item - '0';
-            }
-        }
-        
         List<Integer> result = new ArrayList<>();
         
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (!visited[i][j] && matrix[i][j] != -1) {
-                    dfs(i, j);
-                    result.add(cnt);
+                if (!visited[i][j] && maps[i].charAt(j) != 'X') {
+                    result.add(bfs(i, j, maps));
                 }
-                
-                cnt = 0;
             }
         }
         
@@ -46,25 +28,39 @@ class Solution {
         
         Collections.sort(result);
         answer = new int[result.size()];
+        
         for (int i = 0; i < result.size(); i++) {
             answer[i] = result.get(i);
         }
+        
         return answer;
     }
     
-    public void dfs(int x, int y) {
-        cnt += matrix[x][y];
+    public int bfs(int x, int y, String[] maps) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[] {x, y});
         visited[x][y] = true;
+        int sum = maps[x].charAt(y) - '0';
         
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
             
-            if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
-                if (!visited[nx][ny] && matrix[nx][ny] != -1) {
-                    dfs(nx, ny);
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
+                
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
+                    char next = maps[nx].charAt(ny);
+                    
+                    if (!visited[nx][ny] && next != 'X') {
+                        sum += next - '0';
+                        visited[nx][ny] = true;
+                        queue.offer(new int[] {nx, ny});
+                    }
                 }
             }
         }
+        
+        return sum;
     }
 }
