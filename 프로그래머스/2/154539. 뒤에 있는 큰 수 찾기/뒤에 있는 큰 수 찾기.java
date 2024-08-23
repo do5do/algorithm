@@ -5,22 +5,24 @@ class Solution {
         int[] answer = new int[numbers.length];
         Stack<Integer> stack = new Stack<>();
         
-        stack.push(numbers[numbers.length - 1]);
-        answer[numbers.length - 1] = -1;
+        stack.push(0);
         
-        for (int i = numbers.length - 2; i >= 0; i--) {
-            while (!stack.isEmpty() && stack.peek() <= numbers[i]) {
-                stack.pop();
+        for (int i = 1; i < numbers.length; i++) {
+            while (!stack.isEmpty()) {
+                if (numbers[stack.peek()] < numbers[i]) {
+                    answer[stack.pop()] = numbers[i];
+                } else {
+                    break;
+                }
             }
             
-            if (stack.isEmpty()) {
-                answer[i] = -1;
-            } else {
-                answer[i] = stack.peek();
-            }
-            
-            stack.push(numbers[i]);
+            stack.push(i);
         }
+        
+        while (!stack.isEmpty()) {
+            answer[stack.pop()] = -1;
+        }
+        
         return answer;
     }
 }
