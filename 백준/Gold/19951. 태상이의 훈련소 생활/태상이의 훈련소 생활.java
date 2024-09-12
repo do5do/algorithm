@@ -14,19 +14,29 @@ public class Main {
             heights[i] = Integer.parseInt(st.nextToken());
         }
         
+        int[] sums = new int[n]; // 누적합
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int k = Integer.parseInt(st.nextToken());
             
-            for (int j = a - 1; j < b; j++) {
-                heights[j] += k;
+            sums[a - 1] += k;
+            if (b < n) {
+                sums[b] += -k;
             }
         }
         
+        for (int i = 1; i < n; i++) {
+            sums[i] = sums[i - 1] + sums[i];
+        }
+        
+        for (int i = 0; i < n; i++) { // 기존 높이 더해주기
+            sums[i] += heights[i];
+        }
+        
         StringBuilder sb = new StringBuilder();
-        for (int height : heights) {
+        for (int height : sums) {
             sb.append(height).append(" ");
         }
         
