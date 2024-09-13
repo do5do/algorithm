@@ -1,70 +1,67 @@
 import java.util.*;
 
 class Solution {
+    int[] result;
+    boolean[] visited;
     int[] answer;
-    int maxDiff = -1;
-    int diff;
-
+    int maxDiff = 0;
+    
     public int[] solution(int n, int[] info) {
         answer = new int[info.length];
-        dfs(0, n, info, new int[info.length]);
-
-        if (maxDiff == -1) {
-            answer = new int[] {-1};
+        visited = new boolean[info.length];
+        result = new int[info.length];
+        
+        dfs(0, n, info);
+        
+        if (maxDiff == 0) {
+            return new int[] {-1};
         }
         return answer;
     }
-
-    public void dfs(int depth, int n, int[] info, int[] result) {
-        if (depth == info.length || 0 == n) {
-            if (!isWin(info, result)) {
-                return;
+    
+    public void dfs(int depth, int n, int[] info) {
+        if (depth == info.length || n == 0) {
+            int lion = 0;
+            int apeach = 0;
+            
+            for (int i = 0; i < info.length; i++) {
+                if (info[i] < result[i]) {
+                    lion += (10 - i);
+                } else {
+                    if (info[i] != 0) {
+                        apeach += (10 - i);    
+                    }
+                }
             }
-
-            // 점수 확인
-            if (maxDiff < diff) {
-                answer = Arrays.copyOf(result, result.length);
-                maxDiff = diff;
-            } else if (maxDiff == diff) {
-                for (int i = result.length - 1; i >= 0; i--) {
-                    if (result[i] > answer[i]) {
-                        answer = Arrays.copyOf(result, result.length);
-                        break;
-                    } else if (result[i] < answer[i]) {
-                        break;
+            
+            if (lion > apeach) {
+                int diff = lion - apeach;
+                
+                if (maxDiff < diff) {
+                    maxDiff = diff;
+                    answer = Arrays.copyOf(result, result.length);
+                } else if (maxDiff == diff) {
+                    for (int i = answer.length - 1; i >= 0; i--) {
+                        if (answer[i] < result[i]) {
+                            maxDiff = diff;
+                            answer = Arrays.copyOf(result, result.length);
+                            break;
+                        } else if (answer[i] > result[i]) {
+                            break;
+                        }
                     }
                 }
             }
             return;
         }
-
+        
         for (int i = n; i >= 0; i--) {
-            result[depth] = i;
-            dfs(depth + 1, n - i, info, result);
-        }
-    }
-
-    public boolean isWin(int[] info, int[] result) {
-        int score1 = 0;
-        int score2 = 0; // lion
-
-        for (int i = 0; i < info.length; i++) {
-            if (info[i] == 0 && result[i] == 0) {
-                continue;
-            }
-            int score = 10 - i;
-
-            if (info[i] >= result[i]) {
-                score1 += score;
-            } else {
-                score2 += score;
+            if (!visited[depth]) {
+                visited[depth] = true;
+                result[depth] = i;
+                dfs(depth + 1, n - i, info);
+                visited[depth] = false;
             }
         }
-
-        if (score1 < score2) {
-            diff = score2 - score1;
-            return true;
-        }
-        return false;
     }
 }
