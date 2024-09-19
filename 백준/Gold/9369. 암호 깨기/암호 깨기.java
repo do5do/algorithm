@@ -91,21 +91,21 @@ public class Main {
         if (canDecrypt.isEmpty()) {
             sb.append("IMPOSSIBLE");
         } else if (canDecrypt.size() == 1) {
-            int idx = canDecrypt.get(0);
-            makeDecrypt(match[idx], sb);
+            makeDecrypt(match[canDecrypt.get(0)], sb);
         } else {
             char[] match = new char[26];
 
             for (int i = 0; i < decrypt.length(); i++) {
-                char cur = encrypts[canDecrypt.get(0)].charAt(i);
+                char c = encrypts[canDecrypt.get(0)].charAt(i);
 
                 for (int j = 1; j < canDecrypt.size(); j++) {
-                    if (cur != encrypts[canDecrypt.get(j)].charAt(i)) {
+                    if (c != encrypts[canDecrypt.get(j)].charAt(i)) {
                         break;
                     }
 
                     if (j == canDecrypt.size() - 1) {
-                        match[cur - 'a'] = decrypt.charAt(i);
+                        match[c - 'a'] = decrypt.charAt(i);
+                        break;
                     }
                 }
             }
@@ -120,10 +120,10 @@ public class Main {
         for (int i = 0; i < target.length(); i++) {
             int targetIdx = target.charAt(i) - 'a';
 
-            if (match[targetIdx] >= 'a') {
-                sb.append(match[targetIdx]);
-            } else {
+            if (match[targetIdx] < 'a') {
                 sb.append("?");
+            } else {
+                sb.append(match[targetIdx]);
             }
         }
     }
