@@ -1,48 +1,44 @@
 import java.util.*;
 
 class Solution {
-    List<Integer>[] graph;
+    List<List<Integer>> graph = new ArrayList<>();
     boolean[] visited;
-    int cnt = 0;
+    int cnt;
     
     public int solution(int n, int[][] wires) {
-        int answer = Integer.MAX_VALUE;
-        graph = new ArrayList[n + 1];
-        visited = new boolean[n + 1];
-        
         for (int i = 0; i <= n; i++) {
-            graph[i] = new ArrayList<>();
+            graph.add(new ArrayList());
         }
         
-        for (int i = 0; i < wires.length; i++) {
-            int a = wires[i][0];
-            int b = wires[i][1];
-            graph[a].add(b);
-            graph[b].add(a);
+        for (int[] wire : wires) {
+            int a = wire[0];
+            int b = wire[1];
+            graph.get(a).add(b);
+            graph.get(b).add(a);
         }
         
-        for (int i = 0; i < wires.length; i++) {
-            int[] delete = wires[i];
-            dfs(delete[0], delete);
-            
-            answer = Math.min(answer, Math.abs(cnt - (n - cnt)));
-            cnt = 0;
+        int diff = Integer.MAX_VALUE;
+        
+        for (int[] wire : wires) {
             visited = new boolean[n + 1];
+            cnt = 0;
+            
+            dfs(wire[0], wire);
+            diff = Math.min(diff, Math.abs(cnt - (n - cnt)));
         }
-        
-        return answer;
+        return diff;
     }
     
-    public void dfs(int node, int[] delete) {
-        visited[node] = true;
+    public void dfs(int parent, int[] cut) {
+        visited[parent] = true;
         cnt++;
         
-        for (int child : graph[node]) {
-            if (!visited[child]) {
-                if (node == delete[0] && child == delete[1]) {
+        for (int node : graph.get(parent)) {
+            if (!visited[node]) {
+                if (parent == cut[0] && node == cut[1]) {
                     continue;
                 }
-                dfs(child, delete);
+                dfs(node, cut);
             }
         }
     }
