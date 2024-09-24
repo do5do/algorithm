@@ -1,59 +1,57 @@
 class Solution {
-    int[] rates = new int[] {10, 20, 30, 40}; // 중복 가능
-    int maxTotal = 0;
-    int maxJoin = 0;
+    int maxJoin, maxBuy; // 가입자 수, 매출액
+    int[] percent = {10, 20, 30, 40};
     
     public int[] solution(int[][] users, int[] emoticons) {
-        dfs(0, emoticons, new int[emoticons.length], users);
-        return new int[] {maxJoin, maxTotal};
+        int[] answer = new int[2];
+        
+        dfs(0, new int[emoticons.length], users, emoticons);
+        
+        answer[0] = maxJoin;
+        answer[1] = maxBuy;
+        return answer;
     }
     
-    public void dfs(int depth, int[] emoticons, int[] result, int[][] users) {
+    public void dfs(int depth, int[] result, int[][] users, int[] emoticons) {
         if (depth == emoticons.length) {
-            int[] answer = check(result, emoticons, users); // (1000, 0), (9000, 1)
-            int join = answer[1];
-            int total = answer[0];
+            // 뽑은 할인율가지고 계산
+            int join = 0;
+            int totalBuy = 0;
+            
+            for (int[] user : users) {
+                int buy = 0;
+                
+                for (int i = 0; i < emoticons.length; i++) {
+                    int discount = result[i];
+                    
+                    if (discount >= user[0]) { // 구매 가능
+                        buy += emoticons[i] * ((100 - discount) / 100.0);
+                    }
+                    
+                    if (buy >= user[1]) { // 가입
+                        buy = 0;
+                        join++;
+                        break;
+                    }
+                }
+                
+                totalBuy += buy;
+            }
             
             if (maxJoin < join) {
                 maxJoin = join;
-                maxTotal = total;
+                maxBuy = totalBuy;
             } else if (maxJoin == join) {
-                if (maxTotal < total) {
-                    maxJoin = join;
-                    maxTotal = total;
+                if (maxBuy < totalBuy) {
+                    maxBuy = totalBuy;
                 }
             }
             return;
         }
         
-        for (int i = 0; i < rates.length; i++) {
-            result[depth] = rates[i];
-            dfs(depth + 1, emoticons, result, users);
+        for (int i = 0; i < percent.length; i++) {
+            result[depth] = percent[i];
+            dfs(depth + 1, result, users, emoticons);
         }
-    }
-    
-    public int[] check(int[] result, int[] emoticons, int[][] users) {
-        int total = 0; // 모든 유저의 구매 가격
-        int join = 0;
-        
-        for (int[] user : users) {
-            int price = 0; // 유저별 총 구매 가격
-            
-            for (int i = 0; i < result.length; i++) {
-                if (user[0] <= result[i]) { // 구매
-                    price += emoticons[i] * (1 - (result[i] / 100.0));
-                }
-                
-                if (price >= user[1]) {
-                    price = 0;
-                    join++;
-                    break;
-                }
-            }
-            
-            total += price;
-        }
-        
-        return new int[] {total, join};
     }
 }
