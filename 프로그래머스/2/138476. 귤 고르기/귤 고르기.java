@@ -16,7 +16,7 @@ class Solution {
         Collections.sort(cntList, Collections.reverseOrder());
         
         int totalCnt = 0;
-        for (Integer cnt : cntList) {
+        for (int cnt : cntList) {
             totalCnt += cnt;
             answer++;
             
