@@ -30,9 +30,10 @@ class Solution {
             for (int i = 0; i < n; i++) {
                 if (visited[i]) {
                     result[idx++] = i;
+                    System.out.print(i + ", ");
                 }
             }
-            
+            System.out.println();
             selected.add(result);
             return;
         }
