@@ -11,11 +11,19 @@ class Solution {
             dfs(0, split, "");
         }
         
+        for (String key : map.keySet()) {
+            Collections.sort(map.get(key));
+        }
+        
         for (int i = 0; i < query.length; i++) {
             String str = query[i].replaceAll(" and ", "");
             String[] split = str.split(" ");
+            int cnt = 0;
             
-            int cnt = binarySearch(split[0], Integer.parseInt(split[1]));
+            if (map.containsKey(split[0])) {
+                cnt = binarySearch(split[0], Integer.parseInt(split[1]));
+            }
+            
             answer[i] = cnt;
         }
         
@@ -24,8 +32,6 @@ class Solution {
     
     public int binarySearch(String key, int score) {
         List<Integer> scores = map.get(key);
-        Collections.sort(scores);
-        
         int start = 0;
         int end = scores.size() - 1;
         
@@ -45,9 +51,9 @@ class Solution {
         if (depth == 4) {
             if (!map.containsKey(key)) {
                 map.put(key, new ArrayList<>());
-            } else {
-                map.get(key).add(Integer.parseInt(arr[4]));
             }
+            
+            map.get(key).add(Integer.parseInt(arr[4]));
             return;
         }
         
