@@ -6,35 +6,42 @@ class Solution {
         Map<String, Integer> map = new HashMap<>();
         
         for (int i = 0; i < 10; i++) {
-            if (i >= discount.length) {
+            if (i > discount.length - 1) {
                 break;
             }
             map.put(discount[i], map.getOrDefault(discount[i], 0) + 1);
         }
         
-        for (int i = 0; i < discount.length; i++) {
-            boolean join = true;
-            for (int j = 0; j < want.length; j++) {
-                if (map.containsKey(want[j])) {
-                    if (map.get(want[j]) < number[j]) {
-                        join = false;
-                        break;
-                    }
-                } else {
-                    join = false;
+        int start = 0;
+        int end = start + 10;
+        
+        while (true) {
+            boolean canBuy = true;
+            
+            for (int i = 0; i < want.length; i++) {
+                if (!map.containsKey(want[i]) || map.get(want[i]) < number[i]) {
+                    canBuy = false;
                     break;
                 }
             }
-            
-            if (join) {
+
+            if (canBuy) {
                 answer++;
             }
+
+            if (start > discount.length - 1) {
+                break;
+            }
             
-            map.put(discount[i], map.get(discount[i]) - 1);
-            if (i + 10 < discount.length) {
-                map.put(discount[i + 10], map.getOrDefault(discount[i + 10], 0) + 1);
+            map.put(discount[start], map.get(discount[start]) - 1);
+            start++;
+            
+            if (end < discount.length) {
+                map.put(discount[end], map.getOrDefault(discount[end], 0) + 1);
+                end++;
             }
         }
+    
         return answer;
     }
 }
