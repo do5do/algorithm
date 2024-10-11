@@ -15,8 +15,8 @@ class Solution {
         
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
-            
-            if (cur[0] < arr[idx] || cur[0] > arr[idx]) {
+            // 231421
+            if (cur[0] < arr[idx]) {
                 queue.offer(cur);
             } else if (cur[0] == arr[idx]) {
                 answer++;
