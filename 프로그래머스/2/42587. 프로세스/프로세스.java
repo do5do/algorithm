@@ -6,10 +6,8 @@ class Solution {
         Queue<int[]> queue = new LinkedList<>();
         int[] arr = Arrays.copyOf(priorities, priorities.length);
         Arrays.sort(arr);
-        int max = 0;
         
         for (int i = 0; i < priorities.length; i++) {
-            max = Math.max(priorities[i], max);
             queue.offer(new int[] {priorities[i], i});
         }
         
@@ -18,7 +16,7 @@ class Solution {
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
             
-            if (cur[0] < arr[idx]) {
+            if (cur[0] < arr[idx] || cur[0] > arr[idx]) {
                 queue.offer(cur);
             } else if (cur[0] == arr[idx]) {
                 answer++;
@@ -30,8 +28,6 @@ class Solution {
                 if (idx < 0) {
                     break;
                 }
-            } else {
-                queue.offer(cur);
             }
         }
         
