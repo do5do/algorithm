@@ -4,26 +4,24 @@ class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
         int[] answer = {};
         Queue<Integer> queue = new LinkedList<>();
-        List<Integer> result = new ArrayList<>();
-        
-        for (int i = 0; i < speeds.length; i++) {
-            int restProgress = 100 - progresses[i];
-            int day = restProgress / speeds[i]; // 남은 일수
-            int mod = restProgress % speeds[i];
-            if (mod > 0) {
-                day++;
+        for (int i = 0; i < progresses.length; i++) {
+            int restTime = 100 - progresses[i];
+            int time = restTime / speeds[i];
+            if (restTime % speeds[i] > 0) {
+                time++;
             }
-            
-            queue.offer(day);
+            queue.offer(time);
         }
+        
+        List<Integer> result = new ArrayList<>();
         
         while (!queue.isEmpty()) {
             int cur = queue.poll();
             int cnt = 1;
             
             while (!queue.isEmpty() && queue.peek() <= cur) {
-                cnt++;
                 queue.poll();
+                cnt++;
             }
             
             result.add(cnt);
