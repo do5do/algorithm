@@ -6,16 +6,17 @@ class Solution {
         for (int i = 0; i < prices.length; i++) {
             answer[i] = prices.length - i - 1;
         }
-        Stack<Integer> stack = new Stack<>(); // index 입력
+        
+        Stack<int[]> stack = new Stack<>();
         
         for (int i = 0; i < prices.length; i++) {
-            while (!stack.isEmpty() && prices[stack.peek()] > prices[i]) {
-                answer[stack.peek()] = i - stack.pop(); // 현재 감소 시점 - 주식 시작 시점
+            while (!stack.isEmpty() && stack.peek()[0] > prices[i]) { // 주식이 떨어진 시점
+                int[] cur = stack.pop();
+                answer[cur[1]] = i - cur[1];
             }
             
-            stack.push(i);
+            stack.push(new int[] {prices[i], i});
         }
-        
         return answer;
     }
 }
