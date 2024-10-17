@@ -6,27 +6,34 @@ class Solution {
         Deque<String> deque = new ArrayDeque<>();
         Set<String> set = new HashSet<>();
         
-        for (String city : cities) {
-            String c = city.toLowerCase();
+        if (cacheSize == 0) {
+            return cities.length * 5;
+        }
+        
+        for (int i = 0; i < cities.length; i++) {
+            String city = cities[i].toLowerCase();
             
-            if (cacheSize == 0) {
+            if (deque.isEmpty()) {
+                deque.offerLast(city);
+                set.add(city);
                 answer += 5;
-                continue;
-            }
-            
-            if (set.contains(c)) {
-                answer += 1;
-                // 히트된 캐시의 위치를 가장 뒤로 옮겨준다.
-                deque.remove(c);
-                deque.offerLast(c);
-            } else {
-                if (set.size() == cacheSize) {
-                    String str = deque.pollFirst(); // 가장 오래된 캐시 삭제
-                    set.remove(str);
+            } else {            
+                if (set.contains(city)) { // hit
+                    answer += 1;
+                    deque.remove(city);
+                    deque.offerLast(city);
+                    continue;
                 }
-                set.add(c);
-                deque.offerLast(c);
+                
+                // miss
                 answer += 5;
+                
+                if (set.size() == cacheSize) {
+                    set.remove(deque.pollFirst());
+                }
+                
+                deque.offerLast(city);
+                set.add(city);
             }
         }
         return answer;
