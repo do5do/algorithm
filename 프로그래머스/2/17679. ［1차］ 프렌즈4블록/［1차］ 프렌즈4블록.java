@@ -1,82 +1,96 @@
 class Solution {
     char[][] matrix;
+    int m, n;
     boolean[][] check;
-    int answer = 0;
     
     public int solution(int m, int n, String[] board) {
+        int answer = 0;
         matrix = new char[m][n];
-
+        this.m = m;
+        this.n = n;
+        
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 matrix[i][j] = board[i].charAt(j);
             }
         }
-
-        step(m, n);
-        count(m, n);
-        if (answer == 0) {
-            return answer;
-        }
-
+        
         while (true) {
-            // 보드판 정리
-            for (int i = m - 1; i >= 1; i--) {
-                for (int j = 0; j < n; j++) {
-                    if (check[i][j]) {
-                        for (int k = i - 1; k >= 0; k--) { // 최상단까지 탐색
-                            if (matrix[k][j] != '-') {
-                                matrix[i][j] = matrix[k][j];
-                                matrix[k][j] = '-';
-                                break;
-                            }
+            check = new boolean[m][n];
+            
+            checkBlock(); // 블록 확인
+            int cnt = count(); // 지운 블록 개수
+            if (cnt == 0) {
+                break;
+            }
+            answer += cnt;
+            
+            move(); // 재배치
+        }
+        
+        return answer;
+    }
+    
+    public void move() {
+        for (int i = m - 1; i > 0; i--) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '-') { // 맨 위까지 확인
+                    for (int k = i - 1; k >= 0; k--) {
+                        if (matrix[k][j] != '-') {
+                            matrix[i][j] = matrix[k][j];
+                            matrix[k][j] = '-';
+                            break;
                         }
                     }
                 }
             }
-
-            boolean isNext = step(m, n);
-            count(m, n);
-            
-            if (!isNext) {
-                break;
+        }
+    }
+    
+    public void checkBlock() {
+        for (int i = 0; i < m - 1; i++) {
+            for (int j = 0; j < n - 1; j++) {
+                int cur = matrix[i][j];
+                if (cur == '-') {
+                    continue;
+                }
+                
+                int cnt = 1;
+                
+                if (matrix[i][j + 1] == cur) {
+                    cnt++;
+                }
+                
+                if (matrix[i + 1][j] == cur) {
+                    cnt++;
+                }
+                
+                if (matrix[i + 1][j + 1] == cur) {
+                    cnt++;
+                }
+                
+                if (cnt == 4) {
+                    check[i][j] = true;
+                    check[i][j + 1] = true;
+                    check[i + 1][j] = true;
+                    check[i + 1][j + 1] = true;
+                }
             }
         }
-
-        return answer;
     }
-
-    public void count(int m, int n) {
+    
+    public int count() {
+        int cnt = 0;
+        
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (check[i][j]) {
-                    answer++;
-                    matrix[i][j] = '-';
+                    cnt++;
+                    matrix[i][j] = '-'; // 지우기
                 }
             }
         }
-    }
-
-    public boolean step(int m, int n) {
-        check = new boolean[m][n];
-        boolean flag = false;
-
-        for (int i = 0; i < m - 1; i++) {
-            for (int j = 0; j < n - 1; j++) {
-                if (matrix[i][j] == '-') {
-                    continue;
-                }
-
-                if (matrix[i][j] == matrix[i + 1][j]
-                        && matrix[i + 1][j] == matrix[i][j + 1]
-                        && matrix[i][j + 1] == matrix[i + 1][j + 1]) {
-                    flag = true;
-                    check[i + 1][j] = true;
-                    check[i][j + 1] = true;
-                    check[i + 1][j + 1] = true;
-                    check[i][j] = true;
-                }
-            }
-        }
-        return flag;
+        
+        return cnt;
     }
 }
