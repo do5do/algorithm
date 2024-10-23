@@ -1,19 +1,22 @@
 import java.util.*;
 
 class Solution {
+    int n, m;
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
     
     public int solution(int[][] maps) {
+        n = maps.length;
+        m = maps[0].length;
+        
         return bfs(maps);
     }
     
     public int bfs(int[][] maps) {
-        int n = maps.length;
-        int m = maps[0].length;
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[] {0, 0, 1});
         boolean[][] visited = new boolean[n][m];
+        visited[0][0] = true;
         
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
@@ -23,8 +26,8 @@ class Solution {
             }
             
             for (int i = 0; i < 4; i++) {
-                int nx = dx[i] + cur[0];
-                int ny = dy[i] + cur[1];
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
                 
                 if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
                     if (!visited[nx][ny] && maps[nx][ny] == 1) {
