@@ -20,8 +20,7 @@ public class Main {
         } else if (n.length() == 2) {
             int first = n.charAt(0) - '0';
             int second = n.charAt(1) - '0';
-            n = String.valueOf(first + second);
-            go(oddCnt, n);
+            go(oddCnt, String.valueOf(first + second));
         } else if (n.length() >= 3) {
             for (int i = 0; i <= n.length() - 3; i++) {
                 for (int j = i + 1; j <= n.length() - 2; j++) {
@@ -29,8 +28,7 @@ public class Main {
                     String second = n.substring(i + 1, j + 1);
                     String third = n.substring(j + 1);
                     int sum = Integer.parseInt(first) + Integer.parseInt(second) + Integer.parseInt(third);
-                    n = String.valueOf(sum);
-                    go(oddCnt, n);
+                    go(oddCnt, String.valueOf(sum));
                 }
             }
         }
